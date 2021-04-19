@@ -8,23 +8,22 @@ export DSS_QUERY="postgres" # Directory in which to find query templates
 
 # set the TPC-H Scale Factor
 if test -z $1; then
-	echo "./run.sh <ScaleFactor>"
-	exit -1
+    echo "./run.sh <ScaleFactor>"
+    exit -1
 fi
 size=$1
 
 cd dbgen/
-# compile
-make
-# remove old tables
-rm *.tbl
+rm *.tbl # remove old tables
+make -j$(nproc --all)
+
 # generate data
 ./dbgen -s $size
 # generate queries
 for i in {1..22};do
-	./qgen -d -a -c ${i} > ${i}.sql
-	# TODO: make qgen generate queries with Linux \n
-	dos2unix ${i}.sql
+    ./qgen -d -a -c ${i} > ${i}.sql
+    # TODO: make qgen generate queries with Linux \n
+    dos2unix ${i}.sql
 done
 cd -
 
@@ -37,15 +36,18 @@ psql -d tpch -f tables_load.sql
 
 output="runtime.txt"
 
-# run queries
-for i in {1..19} 21 22;do
-	begin=$(date +%s%N)
-	/usr/bin/time -v psql -d tpch -f dbgen/${i}.sql 2> ${i}.err 1> ${i}.txt
-	end=$(date +%s%N)
-	runtime=$(echo "scale=2; $end - $begin" | bc -l)
-	echo $i,$begin,$end,$runtime >> ${output}
-done
+for trial in {1..5}; do
+    # run queries
+    for i in {1..22}; do
+        begin=$(date +%s%N)
+        /usr/bin/time -v psql -d tpch -f dbgen/${i}.sql 2> ${i}.err 1> ${i}.txt
+        end=$(date +%s%N)
+        runtime=$(echo "scale=2; $end - $begin" | bc -l)
+        echo $i,$begin,$end,$runtime >> ${output}
+    done
 
-cat ${output}
-mkdir results-${size}
-mv -v *.err *.txt results-${size}
+    # results
+    cat ${output}
+    mkdir results-${size}GB-${trial}
+    mv -v *.err *.txt results-${size}GB-${trial}
+done
