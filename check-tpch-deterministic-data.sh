@@ -18,7 +18,6 @@ size=$1
 ###########################################
 
 cd dbgen/
-rm *.tbl # remove old tables
 make -j$(nproc --all) # compile
 # generate queries
 for i in {1..22};do
@@ -36,6 +35,7 @@ output="runtime.txt"
 for trial in {1..5}; do
 
     cd dbgen/
+    rm *.tbl # remove old tables
     ./dbgen -s $size # generate data
     cd -
 
