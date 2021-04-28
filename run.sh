@@ -35,7 +35,7 @@ psql -d tpch -f tables_load.sql
 
 output="runtime.txt"
 
-for trial in {1..5}; do
+for trial in {1..3}; do
     # run queries
     for i in {1..22}; do
         begin=$(date +%s%N)
