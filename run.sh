@@ -28,8 +28,7 @@ done
 cd -
 
 # create tables and load data
-# XXX: you must have access to a database tpch without password
-#createdb tpch
+echo "SELECT 'CREATE DATABASE tpch' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'tpch')\gexec" | psql
 psql -d tpch -f tables_drop.sql
 psql -d tpch -f tables_create.sql
 psql -d tpch -f tables_load.sql
