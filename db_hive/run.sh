@@ -5,13 +5,14 @@
 
 # load data
 for table in customer lineitem nation orders part partsupp region supplier; do
+    hdfs dfs -rm -r "/tpch/${table}"
     hdfs dfs -mkdir -p "/tpch/${table}"
     hdfs dfs -copyFromLocal data_${1}/${table}.tbl /tpch/${table}/
 done
 
 output="runtime.csv"
 for trial in {1..3}; do
-    logdir="hive-${size}GB-${trial}" 
+    logdir="hive-${size}GB-${trial}"
     if ! test -d ${logdir}; then
         mkdir -p ${logdir}
     fi
