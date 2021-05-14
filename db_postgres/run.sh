@@ -13,7 +13,7 @@ psql -d tpch -v "datapath=${PWD}/data_${1}/" -f db_postgres/tables_load.sql
 # run 
 output="runtime.csv"
 for trial in {1..3}; do
-    logdir="postgres-${size}GB-${trial}" 
+    logdir="postgres-${1}GB-${trial}" 
     if ! test -d ${logdir}; then
         mkdir -p ${logdir}
     fi

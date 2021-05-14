@@ -12,7 +12,7 @@ done
 
 output="runtime.csv"
 for trial in {1..3}; do
-    logdir="hive-${size}GB-${trial}"
+    logdir="hive-${1}GB-${trial}"
     if ! test -d ${logdir}; then
         mkdir -p ${logdir}
     fi
