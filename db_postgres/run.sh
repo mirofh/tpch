@@ -25,7 +25,7 @@ for trial in {1..3}; do
         /usr/bin/time -v psql -d tpch -f db_postgres/queries/${i}.sql 2> ${logdir}/${i}.err 1> ${logdir}/${i}.txt
         end=$(date +%s%N)
         runtime=$(echo "scale=2; $end - $begin" | bc -l)
-        echo "$runtime"
+        echo "$(echo "scale=2; ${runtime} / 10^9" | bc -l) (sec)"
         echo $i,$begin,$end,$runtime >> ${logdir}/${output}
     done
 done

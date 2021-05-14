@@ -23,7 +23,7 @@ for trial in {1..3}; do
         begin=$(date +%s%N)
         /usr/bin/time -v hive -f db_hive/queries/${i}.sql 2> ${logdir}/${i}.err 1> ${logdir}/${i}.txt
         end=$(date +%s%N)
-        echo "$runtime"
+        echo "$(echo "scale=2; ${runtime} / 10^9" | bc -l) (sec)"
         runtime=$(echo "scale=2; $end - $begin" | bc -l)
         echo $i,$begin,$end,$runtime >> ${logdir}/${output}
     done
