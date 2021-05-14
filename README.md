@@ -1,3 +1,7 @@
-# TPC-H v2.18.0_rc2 (copy)
+# TPC-H v2.18.0_rc2
 
-Check run.sh to see how to generate queries, load tables and execute TPC-H.
+Run TPC-H on PostgreSQL with Scale Factor 1.
+
+```sh
+./run.sh --postgres 1
+```
